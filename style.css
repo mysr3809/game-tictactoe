@@ -112,7 +112,7 @@ body{
   border: 10px solid lightgray;
 }
 
-.winning-message{
+.winning-window{
   display: none;
   position: fixed;
   top: 0;
@@ -127,18 +127,18 @@ body{
   flex-direction: column;
 }
 
-.winning-message #restart{
+.winning-window #restart{
  font-size: 1em;
  cursor: pointer;
  border: 1px solid black;
  border-radius: 10px;
 }
-.winning-message #restart:hover{
+.winning-window #restart:hover{
   color: white;
   background-color: black;
   border-color: white;
  }
 
- .winning-message.show{
+ .winning-window.show{
    display: flex;
  }

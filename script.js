@@ -12,26 +12,56 @@ const WINNING_COMBINATIONS = [
 ]
 const cellElements = document.querySelectorAll("[data-cell]");
 const boardEl = document.getElementById("board");
+const winMessageEl = document.querySelector(".win-message");
+const restartButton = document.getElementById("restart");
+const winningWindowEl = document.querySelector(".winning-window");
 let circleTurn;
 
 startGame();
 
+restartButton.addEventListener("click", startGame);
+
 function startGame() {
   circleTurn = false;
   cellElements.forEach(cell => {
+    cell.classList.remove(X_CLASS);
+    cell.classList.remove(CIRCLE_CLASS);
+    cell.removeEventListener("click", handleClick);
     cell.addEventListener("click", handleClick, { once: true })
   });
   setHoverFeature();
+  winningWindowEl.classList.remove("show");
 }
 
 function handleClick(e) {
   const cell = e.target;
   const currentClass = circleTurn ? CIRCLE_CLASS : X_CLASS;
   placeMark(cell, currentClass);
-
+  if (checkWin(currentClass)) {
+    console.log("winner");
+    endGame(false);
+  } else if (isDraw()) {
+    endGame(true)
+  }
 
   swapTurn()
   setHoverFeature();
+}
+
+function endGame(draw) {
+  if (draw) {
+    winMessageEl.innerText = `Draw! `
+  } else {
+    winMessageEl.innerText = `${circleTurn ? "O's" : "X's"} Wins! `
+  }
+  winningWindowEl.classList.add("show");
+}
+
+function isDraw() {
+  return [...cellElements].every(cell => {
+    return cell.classList.contains(X_CLASS) ||
+      cell.classList.contains(CIRCLE_CLASS)
+  })
 }
 
 function placeMark(cell, currentClass) {
@@ -54,7 +84,9 @@ function setHoverFeature() {
 
 function checkWin(currentClass) {
   return WINNING_COMBINATIONS.some(combinations => {
-
+    return combinations.every(index => {
+      return cellElements[index].classList.contains(currentClass);
+    })
   })
 }
 
